@@ -1,0 +1,4 @@
+[data]
+bars_path = "/home/boobi/HAUPTLAGER/05_Strategien_Entwicklung/TRADINGPROJEKT/nq_backtest/data/nq_1m_walkforward.parquet"
+shards_dir = "/home/boobi/HAUPTLAGER/05_Strategien_Entwicklung/TRADINGPROJEKT/nq_backtest/data/signal_shards"
+output_dir = "/home/boobi/HAUPTLAGER/26_Baustein_Tester/output"
