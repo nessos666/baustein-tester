@@ -1,0 +1,6 @@
+{
+  "include": ["bt", "tests", "probe.py"],
+  "pythonVersion": "3.12",
+  "venvPath": ".",
+  "venv": ".venv"
+}

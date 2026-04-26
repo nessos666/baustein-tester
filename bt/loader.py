@@ -23,6 +23,8 @@ def load_bars(bars_path: Path) -> pd.DataFrame:
     df = pd.read_parquet(bars_path)
     if not isinstance(df.index, pd.DatetimeIndex):
         raise ValueError(f"Bars-Index ist kein DatetimeIndex: {type(df.index)}")
+    # Normalize OHLCV column names to lowercase (some sources use capitalized names)
+    df.columns = [c.lower() for c in df.columns]
     return df
 
 
