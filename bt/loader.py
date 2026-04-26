@@ -18,14 +18,21 @@ def load_config(config_path: Path = Path("probe.toml")) -> dict:
         return tomllib.load(f)
 
 
+def _normalize_index_to_utc(df: pd.DataFrame) -> pd.DataFrame:
+    """Konvertiert Index auf UTC – vermeidet System-pytz/zoneinfo Abhaengigkeit."""
+    if not isinstance(df.index, pd.DatetimeIndex):
+        return df
+    df.index = pd.to_datetime(df.index, utc=True)
+    return df
+
+
 def load_bars(bars_path: Path) -> pd.DataFrame:
     """Laedt NQ-1m-Bars aus Parquet. Index muss DatetimeIndex sein."""
     df = pd.read_parquet(bars_path)
     if not isinstance(df.index, pd.DatetimeIndex):
         raise ValueError(f"Bars-Index ist kein DatetimeIndex: {type(df.index)}")
-    # Normalize OHLCV column names to lowercase (some sources use capitalized names)
     df.columns = [c.lower() for c in df.columns]
-    return df
+    return _normalize_index_to_utc(df)
 
 
 def load_shard(shard_path: Path) -> pd.DataFrame:
@@ -33,7 +40,7 @@ def load_shard(shard_path: Path) -> pd.DataFrame:
     df = pd.read_parquet(shard_path)
     if not isinstance(df.index, pd.DatetimeIndex):
         raise ValueError(f"Shard-Index ist kein DatetimeIndex: {type(df.index)}")
-    return df
+    return _normalize_index_to_utc(df)
 
 
 def find_shard(shards_dir: Path, concept_cols: list[str]) -> pd.DataFrame | None:
